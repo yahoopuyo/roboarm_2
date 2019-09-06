@@ -1,0 +1,19 @@
+<launch>
+  
+  <!-- gazebo -->
+  <include file="$(find roboarm_2)/launch/gazebo.launch"/>
+
+
+  <!-- rviz -->
+  <arg name="model" default="$(find roboarm_2)/urdf/roboarm2.urdf" />
+  <arg name="gui" default="True"/>
+  <param name="robot_description" textfile="$(arg model)"/>
+  <param name="use_gui" value="$(arg gui)"/>
+  
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find roboarm_2)/launch/urdf.rviz"/>
+  
+
+  <!-- control node python script -->  
+  <node name="wave" pkg="roboarm_2" type="wave.py" />
+
+</launch>

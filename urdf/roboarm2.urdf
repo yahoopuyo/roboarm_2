@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<robot name="roboarm2">
+
+  <link name="base"/>
+
+  <!-- all inertia param below set like Izz = (1/12)*(x^2+y^2), that approximately as box
+  -->
+
+  <link name="body">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.005"/>
+      <geometry>
+        <cylinder length="0.01" radius="0.02"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.005"/>
+      <geometry>
+        <cylinder length="0.01" radius="0.02"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 0.5"/>
+      </material>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.005"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.000108" ixy="0.0" ixz="0.0"
+               iyy="0.00093" iyz="0.0"
+               izz="0.0002"/>
+    </inertial>
+  </link>
+
+  <link name="link1">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.025"/>
+      <geometry>
+        <box size="0.02 0.02 0.04"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.025"/>
+      <geometry>
+        <box size="0.02 0.02 0.04"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 0.5"/>
+      </material>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.000308" ixy="0.0" ixz="0.0" 
+               iyy="0.000308" iyz="0.0" 
+               izz="0.000066"/>
+    </inertial>
+  </link>
+
+  <link name="link2">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0.05 0.035"/>
+      <geometry>
+        <box size="0.02 0.1 0.02"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0.05 0.035"/>
+      <geometry>
+        <box size="0.02 0.1 0.02"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="1 1 1 0.5"/>
+      </material>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.6"/>
+      <inertia ixx="0.00052" ixy="0.0" ixz="0.0" 
+               iyy="0.00004" iyz="0.0" 
+               izz="0.00052"/>
+    </inertial>
+  </link>
+
+  <link name="link3">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0.05 0"/>
+      <geometry>
+        <box size="0.02 0.1 0.02"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0.05 0"/>
+      <geometry>
+        <box size="0.02 0.1 0.02"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="1 1 1 0.5"/>
+      </material>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.6"/>
+      <inertia ixx="0.00052" ixy="0.0" ixz="0.0" 
+               iyy="0.00004" iyz="0.0" 
+               izz="0.00052"/>
+    </inertial>
+  </link>
+
+  <link name="link4">
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0.01 0"/>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0.01 0"/>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="1 1 1 0.5"/>
+      </material>
+    </visual>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.3"/>
+      <inertia ixx="0.00002" ixy="0.0" ixz="0.0" 
+               iyy="0.00002" iyz="0.0" 
+               izz="0.00002"/>
+    </inertial>
+  </link>
+
+  <joint name="body-base" type="fixed">
+    <parent link="base"/>
+    <child link="body"/>
+  </joint>
+
+  <joint name="joint1" type="continuous">
+    <parent link="body"/>
+    <child link="link1"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+
+  <joint name="verticalize" type="fixed">
+    <parent link="link1"/>
+    <child link="link2"/>
+  </joint>
+
+  <joint name="joint3" type="revolute">
+    <parent link="link2"/>
+    <child link="link3"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="0 0.09 0.035"/>
+    <limit effort="10000" lower="-1.0" upper="1.0" velocity="0.5"/>
+  </joint>
+
+  <joint name="joint4" type="revolute">
+    <parent link="link3"/>
+    <child link="link4"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="0 0.09 0"/>
+    <limit effort="10000" lower="-1.0" upper="1.0" velocity="0.5"/>
+  </joint>
+
+
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/roboarm2</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    </plugin>
+  </gazebo>
+
+  <transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint1">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint3">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="tran4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint4">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor4">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+</robot>

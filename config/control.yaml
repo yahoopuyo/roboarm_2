@@ -1,0 +1,19 @@
+roboarm2:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+  # Position Controllers ---------------------------------------
+  joint1_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint1
+    pid: {p: 6.0, i: 0.6, d: 0.06}
+  joint3_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint3
+    pid: {p: 4.0, i: 0.4, d: 1.0}
+  joint4_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: joint4
+    pid: {p: 3.0, i: 0.3, d: 0.03}
